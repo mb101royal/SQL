@@ -1,0 +1,116 @@
+﻿--CREATE DATABASE Group_By
+
+---- Creating tables
+--CREATE TABLE Ishci
+--(
+--	Id INT IDENTITY PRIMARY KEY,
+--	SAA NVARCHAR(128),
+--	VezifeId INT,
+--	Maas MONEY
+--)
+--CREATE TABLE Vezife
+--(
+--	Id INT IDENTITY PRIMARY KEY,
+--	Ad NVARCHAR(50)
+--)
+--CREATE TABLE Filial
+--(
+--	Id INT IDENTITY PRIMARY KEY,
+--	Ad NVARCHAR(50)
+--)
+--CREATE TABLE Mehsul
+--(
+--	Id INT IDENTITY PRIMARY KEY,
+--	Ad NVARCHAR(50),
+--	Alish_Qiymeti MONEY,
+--	Satish_Qiymeti MONEY
+--)
+--CREATE TABLE Satish
+--(
+--	Id INT IDENTITY PRIMARY KEY,
+--	MehsulId INT REFERENCES Mehsul(Id),
+--	IshciId INT REFERENCES Ishci(Id),
+--	Satish_Tarixi DATETIME
+--)
+
+---- Insert data into Ishci table
+--INSERT INTO Ishci (SAA, VezifeId, Maas) VALUES 
+--('John Doe', 1, 5000.00),
+--('Jane Smith', 2, 4500.00),
+--('Bob Johnson', 3, 4000.00);
+
+---- Insert data into Vezife table
+--INSERT INTO Vezife (Ad) VALUES ('Manager'), ('Developer'), ('Sales Representative');
+
+---- Insert data into Filial table
+--INSERT INTO Filial (Ad) VALUES ('Headquarters'), ('Branch A'), ('Branch B');
+
+---- Insert data into Mehsul table
+--INSERT INTO Mehsul (Ad, Alish_Qiymeti, Satish_Qiymeti) VALUES 
+--('Laptop', 800.00, 1200.00),
+--('Smartphone', 400.00, 600.00),
+--('Printer', 200.00, 300.00);
+
+---- Insert data into Satish table
+--INSERT INTO Satish (MehsulId, IshciId, Satish_Tarixi) VALUES 
+--(1, 1, '2023-01-15 08:30:00'),
+--(2, 2, '2023-02-20 12:45:00'),
+--(3, 3, '2023-03-10 15:00:00');
+
+---- 1) Satış cədvəlində işçilərin,
+----	satılan məhsulların,
+----	satışın olduğu filialın, məhsulun alış və satış qiyməti yazılsın.
+
+--SELECT
+--    Ishci.Id AS IshciId,
+--    Ishci.SAA AS IshciAd,
+--    Mehsul.Id AS MehsulId,
+--    Mehsul.Ad AS MehsulAd,
+--    Filial.Id AS FilialId,
+--    Filial.Ad AS FilialAd,
+--    SUM(Mehsul.Alish_Qiymeti) AS TotalAlishQiymet,
+--    SUM(Mehsul.Satish_Qiymeti) AS TotalSatishQiymet
+--FROM Satish
+--JOIN Ishci
+--ON Satish.IshciId = Ishci.Id
+--JOIN Mehsul
+--ON Satish.MehsulId = Mehsul.Id
+--JOIN Filial
+--ON Ishci.VezifeId = Filial.Id
+--GROUP BY Ishci.Id, Ishci.SAA, Mehsul.Id, Mehsul.Ad, Filial.Id, Filial.Ad;
+
+---- 2) Bütün satışların cəmini tap.
+
+--SELECT SUM(Mehsul.Satish_Qiymeti) AS TotalSatish
+--FROM Satish
+--JOIN Mehsul
+--ON Satish.MehsulId = Mehsul.Id;
+
+---- 3) Cari ayda məhsul satışından gələn yekun məbləği tap
+
+--ALTER TABLE Satish
+--ADD FilialId INT REFERENCES Filial(Id)
+
+--UPDATE Satish
+--SET FilialId = 1
+--WHERE Id = 1;
+--UPDATE Satish
+--SET FilialId = 2
+--WHERE Id = 2;
+--UPDATE Satish
+--SET FilialId = 3
+--WHERE Id = 3;
+
+---- ?
+--SELECT Mehsul.Ad, SUM(Mehsul.Satish_Qiymeti - Mehsul.Alish_Qiymeti) AS 'Total Income'
+--FROM Satish
+--JOIN Mehsul
+--ON Mehsul.id = Satish.mehsulid
+--WHERE DATEDIFF(MONTH, Satish.Satish_Tarixi, CURRENT_TIMESTAMP) < 1 ---- <- ft Cefer
+--GROUP BY Mehsul.Ad
+
+--SELECT * FROM Filial;
+--SELECT * FROM Ishci;
+--SELECT * FROM Mehsul;
+--SELECT * FROM Satish;
+--SELECT * FROM Vezife;
