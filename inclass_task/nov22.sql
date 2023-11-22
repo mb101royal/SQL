@@ -86,27 +86,178 @@
 
 
 -------------------------------------------------------------------------------------------------------------------------------
+----Royal's Task 1:
 
-
---CREATE PROCEDURE AddNewBook
---@Title NVARCHAR(64), @Description NVARCHAR(256), @ActualPrice MONEY, @DiscountPrice MONEY, @PublishingHouseId INT,
---@StockCount INT, @ArticleCode VARCHAR(50), @BindingId INT, @Pages INT, @CategoryId INT, @IsDeleted BIT
+--CREATE PROCEDURE InsertBookData
+--(
+--    @Title NVARCHAR(64),
+--    @Description NVARCHAR(256) = 'No description',
+--    @ActualPrice MONEY,
+--    @DiscountPrice MONEY = NULL,
+--    @PublishingHouseTitle NVARCHAR(64),
+--    @StockCount INT,
+--    @ArticleCode VARCHAR(50),
+--    @BindingTitle NVARCHAR(64),
+--    @Pages INT,
+--    @CategoryTitle NVARCHAR(30),
+--    @AuthorName NVARCHAR(40),
+--    @AuthorSurname NVARCHAR(50),
+--    @GenreTitle NVARCHAR(64),
+--    @LanguageTitle NVARCHAR(64),
+--    @CommentDescription NVARCHAR(256),
+--    @Rating INT,
+--    @CommentName NVARCHAR(35),
+--    @CommentEmail NVARCHAR(35),
+--    @CommentImageUrl NVARCHAR(380)
+--)
 --AS
---INSERT INTO Books
---VALUES (@Title, @Description, @ActualPrice, @DiscountPrice, @PublishingHouseId, @StockCount, @ArticleCode, @BindingId, @Pages, @CategoryId, @IsDeleted)
+--BEGIN
+--    DECLARE @PublishingHouseId INT
+--    INSERT INTO PublishingHouses (Title) VALUES (@PublishingHouseTitle)
+--    SET @PublishingHouseId = SCOPE_IDENTITY()
 
---EXEC AddNewBook @Title = 'Helo', @Description = 'Smwsa', @ActualPrice = 2410, @DiscountPrice = 251, @PublishingHouseId = 1,
---	 @StockCount = 2, @ArticleCode = 'ASDADASD', @BindingId = 1, @Pages = 123, @CategoryId = 1, @IsDeleted = 0;
+--    DECLARE @BindingId INT
+--    INSERT INTO Bindings (Title) VALUES (@BindingTitle)
+--    SET @BindingId = SCOPE_IDENTITY()
 
---SELECT * FROM Books
+--    DECLARE @CategoryId INT
+--    INSERT INTO Categories (Title) VALUES (@CategoryTitle)
+--    SET @CategoryId = SCOPE_IDENTITY()
 
---CREATE PROCEDURE ModifyBook
---@id INT, @Title NVARCHAR(64), @Description NVARCHAR(256), @ActualPrice MONEY, @DiscountPrice MONEY, @PublishingHouseId INT,
---@StockCount INT, @ArticleCode VARCHAR(50), @BindingId INT, @Pages INT, @CategoryId INT, @IsDeleted BIT
+--    DECLARE @AuthorId INT
+--    INSERT INTO Authors ([Name], Surname) VALUES (@AuthorName, @AuthorSurname)
+--    SET @AuthorId = SCOPE_IDENTITY()
+
+--    DECLARE @GenreId INT
+--    INSERT INTO Genres (Title) VALUES (@GenreTitle)
+--    SET @GenreId = SCOPE_IDENTITY()
+
+--    DECLARE @LanguageId INT
+--    INSERT INTO Languages (Title) VALUES (@LanguageTitle)
+--    SET @LanguageId = SCOPE_IDENTITY()
+
+--    DECLARE @BookId INT
+--    INSERT INTO Books (Title, [Description], ActualPrice, DiscountPrice, PublishingHouseId, StockCount, ArticleCode, BindingId, Pages, CategoryId)
+--    VALUES (@Title, @Description, @ActualPrice, @DiscountPrice, @PublishingHouseId, @StockCount, @ArticleCode, @BindingId, @Pages, @CategoryId)
+--    SET @BookId = SCOPE_IDENTITY()
+
+--    INSERT INTO BooksAuthors (BookId, AuthorId) VALUES (@BookId, @AuthorId)
+--    INSERT INTO BooksGenres (BookId, GenreId) VALUES (@BookId, @GenreId)
+--    INSERT INTO BooksLanguages (BookId, LanguageId) VALUES (@BookId, @LanguageId)
+
+--    INSERT INTO Comments ([Description], BookId, Rating, Name, Email, ImageUrl)
+--    VALUES (@CommentDescription, @BookId, @Rating, @CommentName, @CommentEmail, @CommentImageUrl)
+--END
+
+--EXEC InsertBookData 'Title', 'Descrip', 2555, NULL, 'PubDescr', 20, 'ArtcCode', 'soft', 465, 'Books', 'Author',
+--'Authorov', 'Genre', 'en', 'CommentDescr', 4, 'CommName', 'Commemail@..ad.w.', 'Image' --Worked
+
+
+---- update qaldi >:(
+
+
+---- Royal's Task 2:
+
+--CREATE TRIGGER TR_Authors_UpdateIsDeleted
+--ON Authors
+--AFTER DELETE
 --AS
---UPDATE Books
---SET
---Title = @Title, [Description] = @Description, ActualPrice = @ActualPrice, DiscountPrice = @DiscountPrice, PublishingHouseId = @PublishingHouseId,
---StockCount = @StockCount, ArticleCode = @ArticleCode, BindingId = @BindingId, Pages = @Pages, CategoryId = @CategoryId, IsDeleted = @IsDeleted, 
---WHERE id = @id;
+--BEGIN
+--    SET NOCOUNT ON;
 
+--    UPDATE Authors
+--    SET IsDeleted = 1
+--    FROM Authors a
+--    INNER JOIN deleted d ON a.Id = d.Id;
+--END
+
+--CREATE TRIGGER TR_PublishingHouses_UpdateIsDeleted
+--ON PublishingHouses
+--AFTER DELETE
+--AS
+--BEGIN
+--    SET NOCOUNT ON;
+
+--    UPDATE PublishingHouses
+--    SET IsDeleted = 1
+--    FROM PublishingHouses ph
+--    INNER JOIN deleted d ON ph.Id = d.Id;
+--END
+
+--CREATE TRIGGER TR_Bindings_UpdateIsDeleted
+--ON Bindings
+--AFTER DELETE
+--AS
+--BEGIN
+--    SET NOCOUNT ON;
+
+--    UPDATE Bindings
+--    SET IsDeleted = 1
+--    FROM Bindings b
+--    INNER JOIN deleted d ON b.Id = d.Id;
+--END
+
+--CREATE TRIGGER TR_Categories_UpdateIsDeleted
+--ON Categories
+--AFTER DELETE
+--AS
+--BEGIN
+--    SET NOCOUNT ON;
+
+--    UPDATE Categories
+--    SET IsDeleted = 1
+--    FROM Categories c
+--    INNER JOIN deleted d ON c.Id = d.Id;
+--END
+
+--CREATE TRIGGER TR_Genres_UpdateIsDeleted
+--ON Genres
+--AFTER DELETE
+--AS
+--BEGIN
+--    SET NOCOUNT ON;
+
+--    UPDATE Genres
+--    SET IsDeleted = 1
+--    FROM Genres g
+--    INNER JOIN deleted d ON g.Id = d.Id;
+--END
+
+--CREATE TRIGGER TR_Languages_UpdateIsDeleted
+--ON Languages
+--AFTER DELETE
+--AS
+--BEGIN
+--    SET NOCOUNT ON;
+
+--    UPDATE Languages
+--    SET IsDeleted = 1
+--    FROM Languages l
+--    INNER JOIN deleted d ON l.Id = d.Id;
+--END
+
+--CREATE TRIGGER TR_Books_UpdateIsDeleted
+--ON Books
+--AFTER DELETE
+--AS
+--BEGIN
+--    SET NOCOUNT ON;
+
+--    UPDATE Books
+--    SET IsDeleted = 1
+--    FROM Books b
+--    INNER JOIN deleted d ON b.Id = d.Id;
+--END
+
+--CREATE TRIGGER TR_Comments_UpdateIsDeleted
+--ON Comments
+--AFTER DELETE
+--AS
+--BEGIN
+--    SET NOCOUNT ON;
+
+--    UPDATE Comments
+--    SET IsDeleted = 1
+--    FROM Comments c
+--    INNER JOIN deleted d ON c.Id = d.Id;
+--END
