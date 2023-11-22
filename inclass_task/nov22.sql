@@ -1,0 +1,112 @@
+--CREATE DATABASE AlininoDB
+--USE AlininoDB
+
+--CREATE TABLE Categories
+--(
+--	Id INT IDENTITY PRIMARY KEY,
+--	Title NVARCHAR(30) NOT NULL,
+--	ParentCategoryId INT REFERENCES Categories(Id),
+--	IsDeleted BIT DEFAULT 0
+--)
+--CREATE TABLE Authors
+--(
+--	Id INT IDENTITY PRIMARY KEY,
+--	[Name] NVARCHAR(40) NOT NULL,
+--	Surname NVARCHAR(50) NOT NULL,
+--	IsDeleted BIT DEFAULT 0
+--)
+--CREATE TABLE PublishingHouses
+--(
+--	Id INT IDENTITY PRIMARY KEY,
+--	Title NVARCHAR(64) NOT NULL,
+--	IsDeleted BIT DEFAULT 0
+--)
+--CREATE TABLE Bindings
+--(
+--	Id INT IDENTITY PRIMARY KEY,
+--	Title NVARCHAR(64) NOT NULL,
+--	IsDeleted BIT DEFAULT 0
+--)
+--CREATE TABLE Books
+--(
+--	Id INT IDENTITY PRIMARY KEY,
+--	Title NVARCHAR(64) NOT NULL,
+--	[Description] NVARCHAR(256) DEFAULT 'No description',
+--	ActualPrice MONEY NOT NULL,
+--	DiscountPrice MONEY DEFAULT NULL,
+--	PublishingHouseId INT REFERENCES PublishingHouses(Id),
+--	StockCount INT,
+--	ArticleCode VARCHAR(50) NOT NULL,
+--	BindingId INT REFERENCES Bindings(Id),
+--	Pages INT NOT NULL,
+--	CategoryId INT REFERENCES Categories(Id),
+--	IsDeleted BIT DEFAULT 0
+--)
+--CREATE TABLE Genres
+--(
+--	Id INT IDENTITY PRIMARY KEY,
+--	Title NVARCHAR(64) NOT NULL,
+--	IsDeleted BIT DEFAULT 0
+--)
+--CREATE TABLE Languages
+--(
+--	Id INT IDENTITY PRIMARY KEY,
+--	Title NVARCHAR(64) NOT NULL,
+--	IsDeleted BIT DEFAULT 0
+--)
+--CREATE TABLE BooksAuthors
+--(
+--	Id INT IDENTITY PRIMARY KEY,
+--	BookId INT REFERENCES Books(Id),
+--	AuthorId INT REFERENCES Authors(Id)
+--)
+--CREATE TABLE BooksGenres
+--(
+--	Id INT IDENTITY PRIMARY KEY,
+--	BookId INT REFERENCES Books(Id),
+--	GenreId INT REFERENCES Genres(Id),
+--)
+--CREATE TABLE BooksLanguages
+--(
+--	Id INT IDENTITY PRIMARY KEY,
+--	BookId INT REFERENCES Books(Id),
+--	LanguageId INT REFERENCES Languages(Id)
+--)
+--CREATE TABLE Comments
+--(
+--	Id INT IDENTITY PRIMARY KEY,
+--	[Description] NVARCHAR(256),
+--	BookId INT REFERENCES Books(Id),
+--	Rating INT CHECK (Rating > 0 AND Rating <= 5),
+--	Name NVARCHAR(35) NOT NULL,
+--	Email NVARCHAR(35) NOT NULL,
+--	ImageUrl NVARCHAR(380),
+--	IsDeleted BIT DEFAULT 0
+--)
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+
+--CREATE PROCEDURE AddNewBook
+--@Title NVARCHAR(64), @Description NVARCHAR(256), @ActualPrice MONEY, @DiscountPrice MONEY, @PublishingHouseId INT,
+--@StockCount INT, @ArticleCode VARCHAR(50), @BindingId INT, @Pages INT, @CategoryId INT, @IsDeleted BIT
+--AS
+--INSERT INTO Books
+--VALUES (@Title, @Description, @ActualPrice, @DiscountPrice, @PublishingHouseId, @StockCount, @ArticleCode, @BindingId, @Pages, @CategoryId, @IsDeleted)
+
+--EXEC AddNewBook @Title = 'Helo', @Description = 'Smwsa', @ActualPrice = 2410, @DiscountPrice = 251, @PublishingHouseId = 1,
+--	 @StockCount = 2, @ArticleCode = 'ASDADASD', @BindingId = 1, @Pages = 123, @CategoryId = 1, @IsDeleted = 0;
+
+--SELECT * FROM Books
+
+--CREATE PROCEDURE ModifyBook
+--@id INT, @Title NVARCHAR(64), @Description NVARCHAR(256), @ActualPrice MONEY, @DiscountPrice MONEY, @PublishingHouseId INT,
+--@StockCount INT, @ArticleCode VARCHAR(50), @BindingId INT, @Pages INT, @CategoryId INT, @IsDeleted BIT
+--AS
+--UPDATE Books
+--SET
+--Title = @Title, [Description] = @Description, ActualPrice = @ActualPrice, DiscountPrice = @DiscountPrice, PublishingHouseId = @PublishingHouseId,
+--StockCount = @StockCount, ArticleCode = @ArticleCode, BindingId = @BindingId, Pages = @Pages, CategoryId = @CategoryId, IsDeleted = @IsDeleted, 
+--WHERE id = @id;
+
